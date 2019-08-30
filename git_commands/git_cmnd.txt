@@ -1,0 +1,35 @@
+Git Commands
+
+
+1.To create a repository :
+	*Goto the directory you want to create repository
+	* $git init
+
+2.To clone an existing repository:
+	$git clone url
+	*Paste the url from github repository
+
+3.Status Update :Gives the status of repository if any changes are made.:
+	$git status
+
+
+To create a user in Git :
+ *To create a user name :
+	$git config --global user.name "Akash"
+ *To set email id :
+	$git config --global user.email "akashkumar121.ak.ak@gmail.com"
+ *To check the details of a user 
+	$git --global --list
+ *To add a github repository:
+	$git remote add origin url
+ * To add a directory or file to git :
+	$git add directory/filename
+
+To commit in git :
+ 	$git commit -m ""
+
+To Push in git :
+	$git push origin master
+
+
+ 
