@@ -1,0 +1,30 @@
+VI Editor
+
+
+i- 	Insert at the cursor(goes into insert mode)
+a- 	Write after cursor(goes into insert mode)
+A- 	Write at the end of the line(goes into insert mode)
+Esc- 	Terminate insert mode
+u- 	Undo last change
+U- 	Undo all changes to the entire line
+o- 	opens a new line(goes into insert mode)
+dd- 	Delete a line
+3dd- 	Delete 3 lines
+D- 	Delete contents of a line after a cursor
+c- 	Deletes contents of a line after the cursor and insert new text
+dw-	Delete word
+4dw- 	Deletes 4 words
+cw-  	Change word
+x- 	Delete character at the cursor
+r- 	Replace character
+R-	Overwrite characters from cursor
+s- 	Substitute one character under cursor
+S- 	Substitute entire line and begin enter
+~-	Change case of individual character
+
+
+MOVING WITHIN A FILE:
+k - 	Move cursor up
+j -	Move cursor down
+h - 	move cursor left
+l -	move cursor right
