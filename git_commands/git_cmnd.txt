@@ -23,13 +23,47 @@ To create a user in Git :
  *To add a github repository:
 	$git remote add origin url
  * To add a directory or file to git :
-	$git add directory/filename
+	$git add directory/filename : It will add a file to staging Index.
 
 To commit in git :
  	$git commit -m ""
 
 To Push in git :
 	$git push origin master
+
+To retrieve the history of commits:
+	$git log :			Gives all the information about comit .
+	$git log --oneline :		Gives the history of commit in singleline.
+	$git log --stat :		Displays the file that have been modified.
+	$git log -p : 			Shows the actual changes that have been made.
+	$git show :			It will show some specific commit.
+
+$ git add . : Stages all the remaining file.
+$ git diff  : Used to see changes that have been made but haven't been committed, yet.
+ .gitignore file: The files you want to have but dont want to commit.
+
+
+TAGGING IN GIT :
+
+Git tag command is used to add a marker on a specific commit. The tag does not move around as new commits are added.
+		$git tag -a v1.0
+
+A git tag can be deleted :
+		$git tag -d v1.0
+
+GIT BRANCH :
+
+A branch is used to do development or make a fix to the project that won't affect the project (since the changes are made on a branch)
+$ git branch 	:	It will show all the branches
+$git branch sidebar : 	It will create a new branch sidebar
+$git checkout sidebar:	It will change the branch to sidebar 
+
+
+
+
+
+	
+
 
 
  
