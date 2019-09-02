@@ -21,7 +21,7 @@ For File Manipulation:
 6.To rename a file :
 	mv sample1 sample3
 7.To copy a file :
-	cp sample1 /Desktop
+	cp path path
 
 
 Directories Manipulation :
@@ -51,7 +51,7 @@ Other important Commands:
 1.Manual of linux Os ,Similar to help:
 	man
 2.history : Gives the history of commands that are run.
-3.Shift + v : For pasting in terminal.
+3.Shift + Insert : For pasting in terminal.
 
 File/Directory  permissions:
 
