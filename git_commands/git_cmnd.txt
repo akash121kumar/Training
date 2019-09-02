@@ -55,10 +55,23 @@ GIT BRANCH :
 
 A branch is used to do development or make a fix to the project that won't affect the project (since the changes are made on a branch)
 $ git branch 	:	It will show all the branches
-$git branch sidebar : 	It will create a new branch sidebar
-$git checkout sidebar:	It will change the branch to sidebar 
+$ git branch sidebar : 	It will create a new branch sidebar
+$ git checkout sidebar:	It will change the branch to sidebar 
+$ git branch -d sidebar:It will delete the branch sidebar
 
+MERGING BRANCH :
 
+Combining branches together is called merging.
+
+$git merge <name of branch to merge in >
+
+		There are two types of merges:
+
+			1.Fast-forward merge – the branch being merged in must be ahead of the checked out branch. The checked out branch's 				  pointer will just be moved forward to point to the same commit as the other branch.
+
+			2.The regular type of merge:
+				(i)two divergent branches are combined
+				(ii)a merge commit is created
 
 
 
