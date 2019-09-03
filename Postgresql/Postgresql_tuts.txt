@@ -147,6 +147,293 @@
 				        Rahul |  20
 					(6 rows)
 
+14.SQL Expressions : 
+		An expression is a combination of one or more values, operators, and PostgresSQL functions that evaluate to a value.
+	1.Boolean Expressions : Boolean Expressions fetch the data on the basis of matching single value.
+			Example :training_db=# select * from company WHERE salary > 50000;
+					o/p==> 
+						id | name  | age |  address   | salary | join_date  
+					       ----+-------+-----+------------+--------+------------
+					  	 4 | Mark  |  25 | Rich-Mond  |  65000 | 2007-12-13
+					  	 5 | David |  27 | Texas      |  85000 | 2007-12-13
+						(2 rows)
+	2.Numeric Expressions :
+				used to perform any mathematical operation in any query. 				
+ 			Example :training_db=# select (21*7) as multiplication;
+					o/p==>  multiplication 
+						----------------
+            						     147
+						(1 row)
+	3.Date Expressions :
+				return the current system date and time values
+			Example : training_db=# select current_date;
+					o/p==> current_date 
+					      --------------
+ 						 2019-09-03
+					      (1 row)
+
+15.WHERE CLAUSE :
+		WHERE clause is used to specify a condition while fetching the data from single table or joining with multiple tables.
+		syntax : select * from tablename where condition;
+		Example :  
+			Query1 : training_db=# select * from company where age>=25 AND salary>=65000;
+				o/p==>
+						 id | name  | age |  address   | salary | join_date  
+						----+-------+-----+------------+--------+------------
+						  4 | Mark  |  25 | Rich-Mond  |  65000 | 2007-12-13
+						  5 | David |  27 | Texas      |  85000 | 2007-12-13
+						(2 rows)
+			Query2 : training_db=# select * from company where age>=25 or salary>=65000;
+				o/p==>
+						 id | name  | age |  address   | salary | join_date  
+						----+-------+-----+------------+--------+------------
+						  1 | Paul  |  32 | California |  20000 | 2001-07-13
+						  2 | Allen |  25 | Texas      |        | 2007-12-13
+						  4 | Mark  |  25 | Rich-Mond  |  65000 | 2007-12-13
+						  5 | David |  27 | Texas      |  85000 | 2007-12-13
+						(4 rows)
+			Query3 : training_db=# select name from company where age is not null;
+
+				o/p==>
+						 name  
+						-------
+						 Paul
+						 Allen
+						 Teddy
+						 Mark
+						 David
+						 Rahul
+						(6 rows)
+			Query4 : training_db=# select * from company where age in (25,27);
+				o/p==> 	
+						 id | name  | age |  address   | salary | join_date  
+						----+-------+-----+------------+--------+------------
+						  2 | Allen |  25 | Texas      |        | 2007-12-13
+						  4 | Mark  |  25 | Rich-Mond  |  65000 | 2007-12-13
+						  5 | David |  27 | Texas      |  85000 | 2007-12-13
+						(3 rows)
+			Query5 :training_db=# select name,age from company where exists(select age from company where salary>65000);
+				o/p==>
+						 name  | age 
+						-------+-----
+						 Paul  |  32
+						 Allen |  25
+						 Teddy |  23
+						 Mark  |  25
+						 David |  27
+						 Rahul |  20
+						(6 rows)
+			Query6 : training_db=# select * from company where age>(select age from company where salary >65000);
+				o/p==>
+						 id | name | age |  address   | salary | join_date  
+						----+------+-----+------------+--------+------------
+						  1 | Paul |  32 | California |  20000 | 2001-07-13
+						(1 row)
+
+16.AND & OR clause :
+			AND and OR operators are used to combine multiple conditions to narrow down selected data in a PostgreSQL statement.
+		1.The AND Operator : if both the condition is true then it will be true.
+			Example : training_db=# select * from company where age=25 and salary>=65000;
+					o/p==>
+						 id | name | age |  address   | salary | join_date  
+						----+------+-----+------------+--------+------------
+						  4 | Mark |  25 | Rich-Mond  |  65000 | 2007-12-13
+						(1 row)
+		2.The OR operators : If one of the condition is true then it is true.
+			Example : training_db=# select * from company where age>25 or salary>20000;
+					o/p==> 
+						 id | name  | age |  address   | salary | join_date  
+						----+-------+-----+------------+--------+------------
+						  1 | Paul  |  32 | California |  20000 | 2001-07-13
+						  4 | Mark  |  25 | Rich-Mond  |  65000 | 2007-12-13
+						  5 | David |  27 | Texas      |  85000 | 2007-12-13
+						(3 rows)
+
+17.UPDATE Query : 
+			used to modify the existing records in a table
+			Example1 : training_db=# update company set salary=17000 where id=3
+					o/p==>UPDATE 1
+						 id | name  | age |  address   | salary  | join_date  
+						----+-------+-----+------------+---------+------------
+						  1 | Paul  |  32 | California |   20000 | 2001-07-13
+						  2 | Allen |  25 | Texas      |         | 2007-12-13
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27
+						  3 | Teddy |  23 | Norway     |   17000 | 
+						(6 rows)
+			Example2: training_db=# update company set address='INDIA' where name='Paul';
+					o/p==>
+						 id | name  | age |  address   | salary  | join_date  
+						----+-------+-----+------------+---------+------------
+						  2 | Allen |  25 | Texas      |         | 2007-12-13
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27
+						  3 | Teddy |  23 | Norway     |   17000 | 
+						  1 | Paul  |  32 | INDIA      |   20000 | 2001-07-13
+						(6 rows)
+18.DELETE Query : 
+			used to delete an existing record.
+			Example : training_db=# delete from company where salary is null;
+					o/p==>
+						 id | name  | age |  address   | salary  | join_date  
+						----+-------+-----+------------+---------+------------
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27
+						  3 | Teddy |  23 | Norway     |   17000 | 
+						  1 | Paul  |  32 | INDIA      |   20000 | 2001-07-13
+
+19.LIKE clause:
+		used to match text values against a pattern using wildcards.
+		1.Any value starts with -'abc%'
+		Example : training_db=# select * from company where name like 'Ra%';
+				o/p==> 
+						 id | name  | age | address | salary  | join_date  
+						----+-------+-----+---------+---------+------------
+						  6 | Rahul |  20 | INDIA   | 19800.2 | 2019-08-27
+						(1 row)
+		2.Any value end with -'%abc' 
+		Example : training_db=# select * from company where address like '%A';
+				o/p==>
+						 id | name  | age | address | salary  | join_date  
+						----+-------+-----+---------+---------+------------
+						  6 | Rahul |  20 | INDIA   | 19800.2 | 2019-08-27
+						  1 | Paul  |  32 | INDIA   |   20000 | 2001-07-13
+						(2 rows)
+		3.Any value which is between at any position-'%ab%'
+		Example : training_db=# select * from company where address like '%or%';
+				o/p==>
+						 id | name  | age | address | salary | join_date 
+						----+-------+-----+---------+--------+-----------
+						  3 | Teddy |  23 | Norway  |  17000 | 
+						(1 row)
+		4.Any values that have 00 in the second and third positions-'_00'
+		Example : training_db=# select * from company where name like '__h%';
+				o/p==> 	
+						 id | name  | age | address | salary  | join_date  
+						----+-------+-----+---------+---------+------------
+						  6 | Rahul |  20 | INDIA   | 19800.2 | 2019-08-27
+						(1 row)
+
+20.LIMIT clause :
+			used to limit the data amount returned by the SELECT statement.
+			Example :  training_db=# select * from company limit 2;
+					o/p==>
+
+						 id | name  | age |  address   | salary | join_date  
+						----+-------+-----+------------+--------+------------
+						  4 | Mark  |  25 | Rich-Mond  |  65000 | 2007-12-13
+						  5 | David |  27 | Texas      |  85000 | 2007-12-13
+
+
+21.ORDER BY clause : 
+			ORDER BY clause is used to sort the data in ascending or descending order, based on one or more columns.
+			Example: training_db=# select * from company order by age;
+					o/p==>
+						 id | name  | age |  address   | salary  | join_date  
+						----+-------+-----+------------+---------+------------
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27
+						  3 | Teddy |  23 | Norway     |   17000 | 
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13
+						  1 | Paul  |  32 | INDIA      |   20000 | 2001-07-13
+						(5 rows)
+
+22.GROUP BY clause: 
+		used in with the SELECT statement to group together those rows in a table that have identical data.It is generally used with 			aggregate functions.
+		Example1:training_db=# select address,sum(salary) from company group by address;
+				o/p==> 
+						  address   |   sum   
+						------------+---------
+						 Rich-Mond  |   65000
+						 Norway     |   17000
+						 INDIA      | 39800.2
+						 Texas      |   85000
+						(4 rows)
+		Example2:training_db=# select name,sum(salary) from company group by name order by name;
+				o/p==>
+						 name  |   sum   
+						-------+---------
+						 David |   85000
+						 Mark  |   65000
+						 Paul  |   20000
+						 Rahul | 19800.2
+						 Teddy |  102000
+						(5 rows)
+
+23.WITH clause : 
+		the WITH query provides a way to write auxiliary statements for use in a larger query. It helps in breaking down complicated 			and large queries into simpler forms, which are easily readable. 
+		Example : training_db=# with summary as (select id,name from company) select * from summary;
+				o/p==>
+						 id | name  
+						----+-------
+						  4 | Mark
+						  5 | David
+						  6 | Rahul
+						  3 | Teddy
+						  1 | Paul
+						  2 | Teddy
+						(6 rows)
+
+
+24.HAVING clause :
+ 			The WHERE clause places conditions on the selected columns, whereas the HAVING clause places conditions on groups 				created by the GROUP BY clause.
+			Example: training_db=# select name from company group by name having count(address)>1;
+					o/p==>
+						 name  
+						-------
+						 Teddy
+						(1 row)
+
+
+25.DISTINCT keyword :
+			used  with SELECT statement to eliminate all the duplicate records and fetching only unique records.
+			Example: training_db=# select Distinct name  from company;
+					o/p==>
+						 name  
+						-------
+						 Rahul
+						 Teddy
+						 David
+						 Paul
+						 Mark
+						(5 rows)
+
+
+
+
+
+
+
+
+				
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
