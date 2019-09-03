@@ -84,6 +84,71 @@
 
 	training_db=# drop table department; 		o/p==>DROP TABLE		Did not find any relations
 
+11.To create a schema:(Collection of tables)
+	training_db=# create schema myschema;		o/p==> CREATE SCHEMA
+
+	1. To create a table in schema:
+		training_db=# create table myschema.company(
+		ID INT NOT NULL,
+		Name VARCHAR(20) NOT NULL,
+		Age INT NOT NULL,
+		Address VARCHAR(30),
+		Salary DECIMAL(18,2),
+		PRIMARY KEY(ID));
+			O/p==> CREATE TABLE
+	2.To verify the table in schema :
+		training_db=# select * from myschema.company;
+		o/p==>  
+					id | name | age | address | salary 
+				       ----+------+-----+---------+--------
+	3.Syntax to Drop a schema:
+		training_db=# drop schema myschema cascade; 	o/p==> NOTICE:  drop cascades to table myschema.company  DROP SCHEMA
+
+12.To insert a value in a table :
+	training_db=# Insert into company values(6,'Rahul',20,'INDIA',19800.20,'2019-08-27');
+		o/p==>INSERT 0 1
+
+
+13.SELECT QUERY :
+	1.To select all the column from a table :
+		training_db=# select * from company 
+			o/p==>
+					id | name  | age |  address   | salary  | join_date  
+					----+-------+-----+------------+---------+------------
+					  1 | Paul  |  32 | California |   20000 | 2001-07-13
+					  2 | Allen |  25 | Texas      |         | 2007-12-13
+					  3 | Teddy |  23 | Norway     |   20000 | 
+					  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13
+					  5 | David |  27 | Texas      |   85000 | 2007-12-13
+					  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27
+					(6 rows)
+	2.To select a specific column from a table :
+		training_db-# select name from company;
+			o/p==>
+					 name  
+					-------
+					 Paul
+					 Allen
+					 Teddy
+					 Mark
+					 David
+					 Rahul
+					(6 rows)
+	3.To select multiple column from a table :
+		training_db=# select  name,age from company;
+			o/p==>   
+					name  | age 
+				       -------+-----
+				        Paul  |  32
+				        Allen |  25
+				        Teddy |  23
+				        Mark  |  25
+				        David |  27
+				        Rahul |  20
+					(6 rows)
+
+
+
 
 
 		
