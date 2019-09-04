@@ -401,8 +401,205 @@
 						 Mark
 						(5 rows)
 
+26.JOINS :
+		1.Cross join : It will give the cartesian product of the tables.
+			Examples: training_db=# select * from employee cross join department;
+				o/p==>
+						 id | name  | age |  address   | salary  | join_date  | id |  dept   | emp_id 
+						----+-------+-----+------------+---------+------------+----+---------+--------
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13 |  1 | IT      |      2
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13 |  1 | IT      |      2
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27 |  1 | IT      |      2
+						  3 | Teddy |  23 | Norway     |   17000 |            |  1 | IT      |      2
+						  1 | Paul  |  32 | INDIA      |   20000 | 2001-07-13 |  1 | IT      |      2
+						  2 | Teddy |  37 | Delhi      |   85000 |            |  1 | IT      |      2
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13 |  2 | Billing |      1
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13 |  2 | Billing |      1
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27 |  2 | Billing |      1
+						  3 | Teddy |  23 | Norway     |   17000 |            |  2 | Billing |      1
+						  1 | Paul  |  32 | INDIA      |   20000 | 2001-07-13 |  2 | Billing |      1
+						  2 | Teddy |  37 | Delhi      |   85000 |            |  2 | Billing |      1
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13 |  3 | Sales   |      5
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13 |  3 | Sales   |      5
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27 |  3 | Sales   |      5
+						  3 | Teddy |  23 | Norway     |   17000 |            |  3 | Sales   |      5
+						  1 | Paul  |  32 | INDIA      |   20000 | 2001-07-13 |  3 | Sales   |      5
+						  2 | Teddy |  37 | Delhi      |   85000 |            |  3 | Sales   |      5
+						(18 rows)
+
+		2.INNER JOIN : returns only the matching pair.
+			Example1: training_db=# select emp_id,name,dept from employee inner join department on employee.id=department.emp_id;
+				o/p==>
+						 emp_id | name  |  dept   
+						--------+-------+---------
+						      2 | Teddy | IT
+						      1 | Paul  | Billing
+						      5 | David | Sales
+						(3 rows)
+
+			Query2:training_db=# select *  from employee inner join department on employee.id=department.emp_id;
+				o/p==>
+						 id | name  | age | address | salary | join_date  | id |  dept   | emp_id 
+						----+-------+-----+---------+--------+------------+----+---------+--------
+						  2 | Teddy |  37 | Delhi   |  85000 |            |  1 | IT      |      2
+						  1 | Paul  |  32 | INDIA   |  20000 | 2001-07-13 |  2 | Billing |      1
+						  5 | David |  27 | Texas   |  85000 | 2007-12-13 |  3 | Sales   |      5
+						(3 rows)
 
 
+
+		3.Left Outer join : Gives all the data from left table and only the matching data from right table.
+			Query1: training_db=# select employee.id,name,dept from employee left outer join department on 					employee.id=department.emp_id order by id;
+				o/p==> 
+						 id | name  |  dept   
+						----+-------+---------
+						  1 | Paul  | Billing
+						  2 | Teddy | IT
+						  3 | Teddy | 
+						  4 | Mark  | 
+						  5 | David | Sales
+						  6 | Rahul | 
+						(6 rows)
+
+		4.Right Outer Join : Gives all the data from right table and matched data from left table.
+			Query1 : training_db=# select * from employee right outer join department on employee.id=department.emp_id;
+				o/p==>
+						 id | name  | age | address | salary | join_date  | id |  dept   | emp_id 
+						----+-------+-----+---------+--------+------------+----+---------+--------
+						  2 | Teddy |  37 | Delhi   |  85000 |            |  1 | IT      |      2
+						  1 | Paul  |  32 | INDIA   |  20000 | 2001-07-13 |  2 | Billing |      1
+						  5 | David |  27 | Texas   |  85000 | 2007-12-13 |  3 | Sales   |      5
+						(3 rows)
+
+		5.FULL OUTER JOIN : Gives all the data from both the tables.
+			Query1 :training_db=# select * from employee full outer join department on employee.id=department.emp_id;
+				o/p==>
+						 id | name  | age |  address   | salary  | join_date  | id |  dept   | emp_id 
+						----+-------+-----+------------+---------+------------+----+---------+--------
+						  2 | Teddy |  37 | Delhi      |   85000 |            |  1 | IT      |      2
+						  1 | Paul  |  32 | INDIA      |   20000 | 2001-07-13 |  2 | Billing |      1
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13 |  3 | Sales   |      5
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27 |    |         |       
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13 |    |         |       
+						  3 | Teddy |  23 | Norway     |   17000 |            |    |         |       
+						(6 rows)
+
+27.UNION and UNION ALL : It will combine the result of two select queries but the select should return same number of columns.Union does not 				return duplicate values but Union All returns duplicate values.
+			Query : training_db=# select * from employee left outer join department on employee.id=department.emp_id UNION 
+ 				select * from employee inner join department on employee.id=department.emp_id; 
+				o/p==> 
+						 id | name  | age |  address   | salary  | join_date  | id |  dept   | emp_id 
+						----+-------+-----+------------+---------+------------+----+---------+--------
+						  4 | Mark  |  25 | Rich-Mond  |   65000 | 2007-12-13 |    |         |       
+						  6 | Rahul |  20 | INDIA      | 19800.2 | 2019-08-27 |    |         |       
+						  2 | Teddy |  37 | Delhi      |   85000 |            |  1 | IT      |      2
+						  3 | Teddy |  23 | Norway     |   17000 |            |    |         |       
+						  1 | Paul  |  32 | INDIA      |   20000 | 2001-07-13 |  2 | Billing |      1
+						  5 | David |  27 | Texas      |   85000 | 2007-12-13 |  3 | Sales   |      5
+						(6 rows)
+
+28.ALIAS : You can rename a table or a column temporarily by giving another name, which is known as ALIAS.
+	Example: training_db=# select c.id as employee_id,c.name as employee_name,c.age,d.dept from employee as c, department as d where 				c.id=D.emp_id;
+			O/p==> 
+						 employee_id | employee_name | age |  dept   
+						-------------+---------------+-----+---------
+							   2 | Teddy         |  37 | IT
+							   1 | Paul          |  32 | Billing
+							   5 | David         |  27 | Sales
+						(3 rows)
+
+29.VIEW : 
+	Example : training_db=# create view employee_view as  select id,name from employee;
+			o/p==> 
+						 id | name  
+						----+-------
+						  4 | Mark
+						  5 | David
+						  6 | Rahul
+						  3 | Teddy
+						  1 | Paul
+						  2 | Teddy
+						(6 rows)
+
+30.Subqueries: query inside query is called subqueries .
+		Example1: training_db=# select * from employee where id in(select id from employee where salary>50000);
+				o/p==>
+						 id | name  | age |  address   | salary | join_date  
+						----+-------+-----+------------+--------+------------
+						  4 | Mark  |  25 | Rich-Mond  |  65000 | 2007-12-13
+						  2 | Teddy |  37 | Delhi      |  85000 | 
+						  5 | Varun |  27 | Texas      |  85000 | 2007-12-13
+						(3 rows)
+
+31.AUTO INCREMENT: it is used to auto increment the value.It is done with the help of serial data type.
+	Example : training_db=# create table employee1(
+		  training_db(# Emp_id serial primary key not null,
+		  training_db(# name char(20),
+		  training_db(# age int not null);
+ 		#Inserting the values in the table : training_db=# insert into employee1(name,age) values('Vikas',30),('Jai',26),('Vijay',24);
+
+			
+32.Indexes : It fastens the select and where query ,It is used for retrieval
+	Example : training_db=# create index emp_index on employee(id);
+			o/p==>
+						training_db=# \d employee
+								      Table "public.employee"
+						  Column   |         Type          | Collation | Nullable | Default 
+						-----------+-----------------------+-----------+----------+---------
+						 id        | integer               |           | not null | 
+						 name      | character varying(20) |           | not null | 
+						 age       | integer               |           | not null | 
+						 address   | text                  |           |          | 
+						 salary    | real                  |           |          | 
+						 join_date | date                  |           |          | 
+						Indexes:
+						    "emp_index" btree (id)
+		#Drop Index: 
+				training_db=# drop index emp_index;
+
+33.TRUNCATE Table command : It will not remove the table ,it will only deletes all the value inside the table but drop table will delete the 					table.
+
+					training_db=# select * from demo;
+						 name         | age |    number    
+					----------------------+-----+--------------
+					 Akash                |  23 |   8750419707
+					 Varun                |  25 |   8750419709
+					 Dheeraj              |  30 | 991140578387
+					(3 rows)
+			 On truncate :training_db=# truncate demo;
+					o/p==>
+					 name | age | number 
+					------+-----+--------
+					(0 rows)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						
+		
+	
+
+	
 
 
 
