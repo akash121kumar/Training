@@ -1,0 +1,274 @@
+---------------------------------------------------* LIBRARY DATABASE *------------------------------------------------------------------------
+
+Database Tables : 	1.Books
+		   	2.Student
+			3.books_issue
+					    List of relations
+				 Schema |    Name     | Type  |  Owner   
+				--------+-------------+-------+----------
+				 public | books       | table | postgres
+				 public | books_issue | table | postgres
+				 public | student     | table | postgres
+				(3 rows)
+
+1.Books : 		
+                           Table "public.books"
+      Column      |         Type          | Collation | Nullable | Default 
+------------------+-----------------------+-----------+----------+---------
+ book_code        | integer               |           | not null | 
+ book_name        | character varying(20) |           | not null | 
+ book_category    | character varying(20) |           |          | 
+ book_edition     | integer               |           |          | 
+ book_price       | integer               |           | not null | 
+ book_author      | character(30)         |           |          | 
+ book_publication | character(30)         |           |          | 
+Indexes:
+    "books_pkey" PRIMARY KEY, btree (book_code)
+Referenced by:
+    TABLE "books_issue" CONSTRAINT "books_issue_book_code_fkey" FOREIGN KEY (book_code) REFERENCES books(book_code)
+
+2.Student : 
+                    Table "public.student"
+    Column    |     Type      | Collation | Nullable | Default 
+--------------+---------------+-----------+----------+---------
+ student_id   | integer       |           | not null | 
+ student_name | character(30) |           | not null | 
+ department   | character(20) |           | not null | 
+Indexes:
+    "student_pkey" PRIMARY KEY, btree (student_id)
+Referenced by:
+    TABLE "books_issue" CONSTRAINT "books_issue_student_id_fkey" FOREIGN KEY (student_id) REFERENCES student(student_id)
+
+3.Books_issue : 
+                Table "public.books_issue"
+    Column     |  Type   | Collation | Nullable | Default 
+---------------+---------+-----------+----------+---------
+ issue_no      | integer |           | not null | 
+ book_code     | integer |           |          | 
+ student_id    | integer |           |          | 
+ issue_date    | date    |           | not null | 
+ return_date   | date    |           | not null | 
+ returned_date | date    |           |          | 
+Indexes:
+    "books_issue_pkey" PRIMARY KEY, btree (issue_no)
+Foreign-key constraints:
+    "books_issue_book_code_fkey" FOREIGN KEY (book_code) REFERENCES books(book_code)
+    "books_issue_student_id_fkey" FOREIGN KEY (student_id) REFERENCES student(student_id)
+
+
+
+Data in Books table :
+ book_code |  book_name   | book_category | book_edition | book_price |          book_author           |        book_publication        
+-----------+--------------+---------------+--------------+------------+--------------------------------+--------------------------------
+       101 | Java         | Education     |         2015 |        500 | Vijay                          | R L Publications              
+       102 | Harry-Potter | Entertainment |         2002 |        700 | JK Rowlings                    | J K Publications              
+       103 | Python       | Education     |         2006 |        550 | Corey Schafer                  | CS publications               
+       104 | Kalakar      | Music         |         2018 |        800 | Naved                          | R L publications              
+       105 | Marvels      | Entertainment |         2004 |       1000 | Stan Lee                       | Disney                        
+(5 rows)
+
+Data in Student :
+ student_id |          student_name          |      department      
+------------+--------------------------------+----------------------
+      20211 | Akash                          | CSE                 
+      20214 | Vinay                          | Civil               
+      20321 | Lokesh                         | Civil               
+      20344 | Honey                          | Mechanical          
+      20212 | Abhishek                       | CSE                 
+      20416 | Mragank                        | ECE                 
+      20545 | Jitender                       | CSE                 
+      20218 | Arpit                          | Mechanical          
+(8 rows)
+ Data in books_issue : 
+ issue_no | book_code | student_id | issue_date | return_date | returned_date 
+----------+-----------+------------+------------+-------------+---------------
+        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+        3 |       102 |      20545 | 2019-08-02 | 2019-09-02  | 2019-09-01
+        4 |       105 |      20321 | 2019-07-04 | 2019-08-02  | 2019-07-28
+(4 rows)
+
+
+
+
+Query 1:  name of the students who have issued a book?
+	==> library=# select student_name from student inner join books_issue on student.student_id=books_issue.student_id;
+			  student_name          
+		--------------------------------
+		 Akash                         
+		 Honey                         
+		 Jitender                      
+		 Lokesh                        
+		(4 rows)
+Query 2 : Name of the books that are issued and the edition of that book:
+	==>  library=# select Book_name,book_edition  from books inner join  books_issue on  books.book_code=books_issue.book_code;
+book_name   | book_edition 
+--------------+--------------
+ Python       |         2006
+ Java         |         2015
+ Harry-Potter |         2002
+ Marvels      |         2004
+(4 rows)
+
+Query 3 : Group by query : library=# select count(book_category),book_category from books group by book_category; 
+ count | book_category 
+-------+---------------
+     2 | Entertainment
+     1 | Music
+     2 | Education
+(3 rows)
+
+Query 4 : Having  : library=# select count(book_category),book_category from books group by book_category having count(book_category) >1; 
+ count | book_category 
+-------+---------------
+     2 | Entertainment
+     2 | Education
+(2 rows)
+
+Query 5 : Left Outer join : library=# select * from student left outer join books_issue on student.student_id=books_issue.student_id order by 					student.student_id;
+ student_id |          student_name          |      department      | issue_no | book_code | student_id | issue_date | return_date | returned_date 
+------------+--------------------------------+----------------------+----------+-----------+------------+------------+-------------+---------------
+      20211 | Akash                          | CSE                  |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20212 | Abhishek                       | CSE                  |          |           |            |            |             | 
+      20214 | Vinay                          | Civil                |          |           |            |            |             | 
+      20218 | Arpit                          | Mechanical           |          |           |            |            |             | 
+      20321 | Lokesh                         | Civil                |        4 |       105 |      20321 | 2019-07-04 | 2019-08-02  | 2019-07-28
+      20344 | Honey                          | Mechanical           |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20416 | Mragank                        | ECE                  |          |           |            |            |             | 
+      20545 | Jitender                       | CSE                  |        3 |       102 |      20545 | 2019-08-02 | 2019-09-02  | 2019-09-01
+(8 rows)
+
+Query 6 : Right Outer join : library=# select * from student right outer join books_issue on student.student_id=books_issue.student_id;
+ student_id |          student_name          |      department      | issue_no | book_code | student_id | issue_date | return_date | returned_date 
+------------+--------------------------------+----------------------+----------+-----------+------------+------------+-------------+---------------
+      20211 | Akash                          | CSE                  |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20321 | Lokesh                         | Civil                |        4 |       105 |      20321 | 2019-07-04 | 2019-08-02  | 2019-07-28
+      20344 | Honey                          | Mechanical           |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20545 | Jitender                       | CSE                  |        3 |       102 |      20545 | 2019-08-02 | 2019-09-02  | 2019-09-01
+(4 rows)
+
+Query 7 : Full outer join: 
+
+student_id |          student_name          |      department      | issue_no | book_code | student_id | issue_date | return_date | returned_date 
+------------+--------------------------------+----------------------+----------+-----------+------------+------------+-------------+---------------
+      20211 | Akash                          | CSE                  |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20212 | Abhishek                       | CSE                  |          |           |            |            |             | 
+      20214 | Vinay                          | Civil                |          |           |            |            |             | 
+      20218 | Arpit                          | Mechanical           |          |           |            |            |             | 
+      20321 | Lokesh                         | Civil                |        4 |       105 |      20321 | 2019-07-04 | 2019-08-02  | 2019-07-28
+      20344 | Honey                          | Mechanical           |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20416 | Mragank                        | ECE                  |          |           |            |            |             | 
+      20545 | Jitender                       | CSE                  |        3 |       102 |      20545 | 2019-08-02 | 2019-09-02  | 2019-09-01
+(8 rows)
+
+Query 8 : library=# create view student_issue as select student.student_id,student_name,issue_no,issue_date from student full outer join books_issue on student.student_id=books_issue.student_id;
+ student_id |          student_name          | issue_no | issue_date 
+------------+--------------------------------+----------+------------
+      20211 | Akash                          |        1 | 2019-03-18
+      20344 | Honey                          |        2 | 2019-04-20
+      20545 | Jitender                       |        3 | 2019-08-02
+      20321 | Lokesh                         |        4 | 2019-07-04
+      20218 | Arpit                          |          | 
+      20212 | Abhishek                       |          | 
+      20214 | Vinay                          |          | 
+      20416 | Mragank                        |          | 
+(8 rows)
+
+Query 9 : library=# select  count(distinct department) from student;
+ count 
+-------
+     4
+(1 row)
+
+Query10 : Cross join : library=# select * from student cross join books_issue ;
+
+ student_id |          student_name          |      department      | issue_no | book_code | student_id | issue_date | return_date | returned_date 
+------------+--------------------------------+----------------------+----------+-----------+------------+------------+-------------+---------------
+      20211 | Akash                          | CSE                  |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20214 | Vinay                          | Civil                |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20321 | Lokesh                         | Civil                |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20344 | Honey                          | Mechanical           |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20212 | Abhishek                       | CSE                  |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20416 | Mragank                        | ECE                  |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20545 | Jitender                       | CSE                  |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20218 | Arpit                          | Mechanical           |        1 |       103 |      20211 | 2019-03-18 | 2019-04-18  | 2019-03-31
+      20211 | Akash                          | CSE                  |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20214 | Vinay                          | Civil                |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20321 | Lokesh                         | Civil                |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20344 | Honey                          | Mechanical           |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20212 | Abhishek                       | CSE                  |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20416 | Mragank                        | ECE                  |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20545 | Jitender                       | CSE                  |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20218 | Arpit                          | Mechanical           |        2 |       101 |      20344 | 2019-04-20 | 2019-05-20  | 
+      20211 | Akash                          | CSE                  |        3 |       102 |      20545 | 2019-08-02 | 2019-09-02  | 2019-09-01
+
+Query : library=# select count(student.department),department from student join books_issue on student.student_id=books_issue.student_id Group 			  By department order by count(department) Desc;
+ count |      department      
+-------+----------------------
+     2 | CSE                 
+     1 | Mechanical          
+     1 | Civil               
+(3 rows) 
+
+Query : library=# select count(student.department),department from student Group By department order by count(department) Desc;
+ count |      department      
+-------+----------------------
+     3 | CSE                 
+     2 | Mechanical          
+     2 | Civil               
+     1 | ECE                 
+(4 rows)
+
+Query : library=# select count(student.department),department from student Group By department having count(department)>2 order by count(department) Desc;
+ count |      department      
+-------+----------------------
+     3 | CSE                 
+(1 row)
+
+
+Query : library=# select  issue_no,books.book_code,book_name,student_id from books join books_issue on books.book_code=books_issue.book_code;
+ issue_no | book_code |  book_name   | student_id 
+----------+-----------+--------------+------------
+        1 |       103 | Python       |      20211
+        2 |       101 | Java         |      20344
+        3 |       102 | Harry-Potter |      20545
+        4 |       105 | Marvels      |      20321
+(4 rows)
+
+
+Query :library=# select student.student_id,student_name,department,issue_no from student join books_issue on student.student_id=books_issue.student_id where returned_date is null;
+ student_id |          student_name          |      department      | issue_no 
+------------+--------------------------------+----------------------+----------
+      20344 | Honey                          | Mechanical           |        2
+(1 row)
+
+Query:library=# select issue_no,book_name,book_edition from books join books_issue on books.book_code=books_issue.book_code where issue_date='2019-03-18';
+ issue_no | book_name | book_edition 
+----------+-----------+--------------
+        1 | Python    |         2006
+(1 row)
+
+Query : library=# select issue_date from books_issue order by issue_date desc;
+ issue_date 
+------------
+ 2019-08-02
+ 2019-07-04
+ 2019-04-20
+ 2019-03-18
+(4 rows)
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
