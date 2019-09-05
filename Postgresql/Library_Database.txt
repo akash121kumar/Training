@@ -257,6 +257,16 @@ Query : library=# select issue_date from books_issue order by issue_date desc;
  2019-03-18
 (4 rows)
 
+Query:
+library=# select count(books_issue.student_id),books_issue.student_id from student join books_issue on student.student_id=books_issue.student_id group by books_issue.student_id;
+ count | student_id 
+-------+------------
+     2 |      20211
+     1 |      20321
+     1 |      20545
+     1 |      20344
+(4 rows)
+
 
 
 
