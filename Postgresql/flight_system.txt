@@ -127,6 +127,12 @@ Query : b. For each pilot who is certified for more than two aircraft, find the 
 				 303 | 5000
 				 301 | 5000
 				(2 rows)
+Query : c. Find the names of pilots whose salary is less than the price of the cheapestroute from Delhi to Goa.
+	==>flight_sytem=# select e.ename from employees e,certified c where e.salary<(select min(f.price) from flights f where f._from='Delhi' 				  and f._to='Goa') and c.eid=e.eid;
+				 ename 
+				-------
+				(0 rows)
+
 
 
 
