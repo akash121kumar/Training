@@ -152,6 +152,16 @@ Query :e. Find the names of pilots certified for some Boeing aircraft.
 		 Naveen                        
 		(3 rows)
 
+Query : f. Find the aids of all aircraft that can be used on routes from Los Angeles to Chicago.
+	==>flight_sytem=# select a.aid from aircraft a where a.cruising_range>(select f.distance from flights f where f._from='Los Angeles' 		   and f._to='Chicago');
+		 aid 
+		-----
+		   3
+		   4
+		   5
+		(3 rows)
+
+Query : 
 
 
 
