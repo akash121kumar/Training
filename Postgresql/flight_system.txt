@@ -173,7 +173,16 @@ Query : g. Identify the routes that can be piloted by every pilot who makes more
 			 Bagdogra    | Delhi
 			 Los Angeles | Chicago
 			(7 rows)
- Query : 
+ Query : h. Print the enames of pilots who can operate planes with cruisingrange greaterthan 3000 miles but are not certified on any Boeing 		    aircraft.
+	==>flight_sytem=# select e.ename from employees e ,certified c ,aircraft a where e.eid=c.eid and a.aid=c.aid and a.cruising_range>3000 				  and a.aname<>'Boing 270';
+				     ename              
+			--------------------------------
+			 Akash                         
+			 Ajay                          
+			 Vikas                         
+			(3 rows)
+
+Query : s
 
 
 
