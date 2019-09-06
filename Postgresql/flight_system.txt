@@ -108,3 +108,18 @@ Data in Certified :
 (12 rows)
 
 
+
+Query : a. Find the names of aircraft such that all pilots certified to operate them earnmore than $80,000.
+	==>	flight_sytem=# select aname from aircraft a join certified c on a.aid=c.aid join employees e on e.eid=c.eid where salary>80000;
+		   aname    
+		------------
+		 Airbus 280
+		 Boing 270
+		 Airbus 350
+		 Airbus 360
+		 Airbus 380
+		(5 rows)
+
+
+
+
