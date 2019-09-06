@@ -1,0 +1,110 @@
+*************************************************	Flight System 	***********************************************************************
+
+
+
+Tables : 1. Flights 
+	 2.Aircraft
+	 3.Employees
+	 4.Certified
+ 
+1.Flights :
+  Column  |          Type          | Collation | Nullable | Default 
+----------+------------------------+-----------+----------+---------
+ fl_no    | integer                |           | not null | 
+ _from    | character varying(30)  |           |          | 
+ _to      | character varying(30)  |           |          | 
+ distance | integer                |           |          | 
+ departs  | time without time zone |           |          | 
+ arrives  | time without time zone |           |          | 
+ price    | integer                |           |          | 
+Indexes:
+    "flights_pkey" PRIMARY KEY, btree (fl_no)
+
+2.Aircraft : 
+                         Table "public.aircraft"
+     Column     |         Type          | Collation | Nullable | Default 
+----------------+-----------------------+-----------+----------+---------
+ aid            | integer               |           | not null | 
+ aname          | character varying(50) |           | not null | 
+ cruising_range | integer               |           |          | 
+Indexes:
+    "aircraft_pkey" PRIMARY KEY, btree (aid)
+
+3.Employee :
+                Table "public.employees"
+ Column |     Type      | Collation | Nullable | Default 
+--------+---------------+-----------+----------+---------
+ eid    | integer       |           | not null | 
+ ename  | character(30) |           | not null | 
+ salary | integer       |           |          | 
+Indexes:
+    "employees_pkey" PRIMARY KEY, btree (eid)
+
+4.             Table "public.certified"
+ Column |  Type   | Collation | Nullable | Default 
+--------+---------+-----------+----------+---------
+ eid    | integer |           |          | 
+ aid    | integer |           |          | 
+Foreign-key constraints:
+    "certified_aid_fkey" FOREIGN KEY (aid) REFERENCES aircraft(aid)
+    "certified_eid_fkey" FOREIGN KEY (eid) REFERENCES employees(eid)
+
+
+
+	Data in Flights :
+ fl_no |    _from    |    _to     | distance | departs  | arrives  | price 
+-------+-------------+------------+----------+----------+----------+-------
+   101 | Delhi       | Bangalore  |     2000 | 10:45:00 | 14:00:00 |  3999
+   102 | Pune        | Delhi      |     1800 | 12:00:00 | 17:30:00 |  2500
+   103 | Bangalore   | Mumbai     |     3500 | 02:15:00 | 05:25:00 |  3500
+   104 | Delhi       | Goa        |     4500 | 10:15:00 | 14:25:00 |  4000
+   105 | Los Angeles | Chicago    |    18000 | 08:15:00 | 20:25:00 | 10000
+   106 | Delhi       | Chandigarh |      500 | 00:15:00 | 02:35:00 |  2000
+   107 | Bagdogra    | Delhi      |     1450 | 15:00:00 | 00:00:00 |  4500
+(7 rows)
+
+	Data in Aircraft:
+ aid |   aname    | cruising_range 
+-----+------------+----------------
+   1 | Airbus 280 |           1000
+   2 | Boing 270  |           4000
+   3 | Airbus 360 |           8000
+   4 | Airbus 340 |           5000
+   5 | Boing 340  |           5000
+   6 | Airbus 370 |            500
+   7 | Airbus 350 |            800
+   8 | Airbus 380 |           1000
+(8 rows)
+
+	Data in employees:
+ eid |             ename              | salary 
+-----+--------------------------------+--------
+ 301 | Akash                          |  60000
+ 302 | Vijay                          |  85000
+ 303 | Vikas                          |  50000
+ 304 | Ajay                           | 150000
+ 306 | Mragank                        |  75000
+ 307 | Naveen                         |  25000
+ 308 | prabhat                        |  45000
+ 305 | Abhishek                       |  95000
+(8 rows)
+
+
+Data in Certified : 
+ eid | aid 
+-----+-----
+ 301 |   1
+ 302 |   1
+ 301 |   2
+ 305 |   2
+ 307 |   2
+ 301 |   4
+ 303 |   8
+ 304 |   7
+ 303 |   6
+ 304 |   3
+ 302 |   8
+ 303 |   5
+(12 rows)
+
+
