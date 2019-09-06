@@ -133,6 +133,16 @@ Query : c. Find the names of pilots whose salary is less than the price of the c
 				-------
 				(0 rows)
 
+Query :d. For all aircraft with cruisingrange over 1000 miles, find the name of theaircraft and the average salary of all pilots certified for 		  this aircraft.
+	==> flight_sytem=# select a.aname,avg(e.salary) as avg_salary from employees e,certified c , aircraft a where e.eid=c.eid and 				   a.aid=c.aid and a.cruising_range>1000 group by a.aname;
+			   aname    |     avg_salary      
+			------------+---------------------
+			 Boing 270  |  60000.000000000000
+			 Boing 340  |  50000.000000000000
+			 Airbus 360 | 150000.000000000000
+			 Airbus 340 |  60000.000000000000
+			(4 rows)
+
 
 
 
