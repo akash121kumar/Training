@@ -120,6 +120,14 @@ Query : a. Find the names of aircraft such that all pilots certified to operate 
 		 Airbus 380
 		(5 rows)
 
+Query : b. For each pilot who is certified for more than two aircraft, find the eid and the maximum cruisingrange of the aircraft for which 			she or he is certified.
+	==>flight_sytem=# select c.eid ,max(cruising_range) from certified c,aircraft a where c.aid=a.aid group by c.eid having count(*)>2;
+				 eid | max  
+				-----+------
+				 303 | 5000
+				 301 | 5000
+				(2 rows)
+
 
 
 
