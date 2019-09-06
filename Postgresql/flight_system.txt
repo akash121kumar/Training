@@ -182,14 +182,20 @@ Query : g. Identify the routes that can be piloted by every pilot who makes more
 			 Vikas                         
 			(3 rows)
 
-Query : j. Compute the difference between the average salary of a pilot and the averagesalary of all employees (including pilots).
+Query : j. Compute the difference between the average salary of a pilot and the average salary of all employees (including pilots).
 	==>flight_sytem=# select ((select avg(e.salary) from employees e,certified c where e.eid=c.eid)-(select avg(salary)from employees))as 		   		  diff;
 			       diff        
 			-------------------
 			 8916.666666666667
 			(1 row)
 
-Query : 
+Query : k. Print the name and salary of every nonpilot whose salary is more than theaverage salary for pilots.
+	==> flight_sytem=# select e.ename ,e.salary from employees e where e.ename not in(select distinct e.ename from employees e,certified c where e.eid=c.eid) and salary>(select avg(e.salary) from employees e,certified c where e.eid=c.eid);
+			 ename | salary 
+			-------+--------
+			(0 rows)
+
+Query :
 
 
 
