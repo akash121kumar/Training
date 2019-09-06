@@ -195,7 +195,31 @@ Query : k. Print the name and salary of every nonpilot whose salary is more than
 			-------+--------
 			(0 rows)
 
-Query :
+Query :l. Print the names of employees who are certified only on aircrafts with cruisingrange longer than 1000 miles.
+	==>flight_sytem=# select distinct e.ename from employees e,certified c,aircraft a where e.eid=c.eid and a.aid=c.aid and 			  a.cruising_range>1000;
+				     ename              
+			--------------------------------
+			 Ajay                          
+			 Naveen                        
+			 Akash                         
+			 Vikas                         
+			 Abhishek                      
+			(5 rows)
+Query :m. Print the names of employees who are certified only on aircrafts with cruisingrange longer than 1000 miles, but on at least two such 		  aircrafts.
+	 ==>flight_sytem=# select e.ename from employees e,certified c,aircraft a where e.eid=c.eid and a.aid=c.aid and cruising_range>1000 				   group by e.ename having count(*)>=2;
+			     ename              
+		--------------------------------
+		 Akash                         
+		(1 row)
+Query :n. Print the names of employees who are certified only on aircrafts with cruisingrange longer than 1000 miles and who are certified on 			some Boeing aircraft.
+
+	==>flight_sytem=# select e.ename from employees e,certified c,aircraft a where e.eid=c.eid and a.aid=c.aid and a.cruising_range>1000 			          and e.ename like '%boing%';
+				 ename 
+				-------
+				(0 rows)
+
+
+
 
 
 
