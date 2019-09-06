@@ -161,7 +161,20 @@ Query : f. Find the aids of all aircraft that can be used on routes from Los Ang
 		   5
 		(3 rows)
 
-Query : 
+Query : g. Identify the routes that can be piloted by every pilot who makes more than$100,000.
+	==>flight_sytem=# select f._from ,f._to from flights f where f.distance<(select max(a.cruising_range) from Aircraft a,employees 	     		  e,certified c where a.aid=c.aid and e.eid=c.eid and e.salary>100000); 
+			    _from    |    _to     
+			-------------+------------
+			 Delhi       | Bangalore
+			 Pune        | Delhi
+			 Bangalore   | Mumbai
+			 Delhi       | Goa
+			 Delhi       | Chandigarh
+			 Bagdogra    | Delhi
+			 Los Angeles | Chicago
+			(7 rows)
+ Query : 
+
 
 
 
