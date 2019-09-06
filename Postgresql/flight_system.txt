@@ -143,6 +143,16 @@ Query :d. For all aircraft with cruisingrange over 1000 miles, find the name of 
 			 Airbus 340 |  60000.000000000000
 			(4 rows)
 
+Query :e. Find the names of pilots certified for some Boeing aircraft.
+	==>flight_sytem=# select e.ename from employees e, aircraft a,certified c where c.eid=e.eid and a.aid=c.aid and aname='Boing 270'; 
+			     ename              
+		--------------------------------
+		 Akash                         
+		 Abhishek                      
+		 Naveen                        
+		(3 rows)
+
+
 
 
 
