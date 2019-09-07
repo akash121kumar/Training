@@ -1,1 +1,8 @@
-puts "Hello this is my first program"
+class Sample
+	def hello
+		puts"Hello World"
+	end
+end
+
+ob=Sample.new
+ob.hello
