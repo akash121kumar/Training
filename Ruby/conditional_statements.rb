@@ -9,3 +9,11 @@ end
 
 #if modifier
 puts "x is zero" if x==0
+
+#Unless Statement
+y=8
+unless y<5 
+	puts y
+else 
+	"Y is greater than 5"
+end
