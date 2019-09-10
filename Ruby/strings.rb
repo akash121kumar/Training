@@ -27,3 +27,17 @@ puts str1.delete 'l'
 puts str2.each_byte{|c| print c , ' '}
 str2.each_char{|c| print c , ' '}
 puts str2.empty?
+puts str1.end_with?('ello')
+puts str1.length
+puts str1.succ
+puts str1.replace "world"
+puts str1.reverse
+puts str1.rindex('l')
+puts str1.rpartition('l')
+puts str1.size
+puts str1.slice(2,5)
+str3= "Hello this is first program"
+str4=str3.split 
+puts str4
+str5="yellow moon"
+puts str5.squeeze
