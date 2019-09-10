@@ -41,3 +41,6 @@ str4=str3.split
 puts str4
 str5="yellow moon"
 puts str5.squeeze
+puts str1.swapcase
+puts "hello".tr('el','ip')
+"a1".upto("b6") {|s| print s, ' '}
