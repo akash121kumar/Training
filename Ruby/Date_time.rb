@@ -17,4 +17,6 @@ puts time.hour			#gives hour
 puts time.min  			#gives minutes
 puts time.sec			#gives seconds
 puts time.usec			#gives microseconds
-puts time.zone			#gives the timezonde
+puts time.zone			#gives the timezone
+
+puts time.strftime("%d-%b-%Y %H:%M:%S")
