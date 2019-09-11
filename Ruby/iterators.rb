@@ -10,6 +10,18 @@
 
 
 
-1.upto(5) do |i|
-	puts i
-end
+# 1.upto(5) do |i|
+# 	puts i
+# end
+
+# 5.downto(0) do |i|
+# 	puts i
+# end
+
+# (0..20).step(5) do |i|
+# 	puts i
+# end
+
+"All\nthe\nwords\nare\nprinted\nin\na\nnew\line.".each_line do |line|   
+	puts line   
+end  
