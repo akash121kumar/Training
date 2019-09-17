@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_17_045824) do
+ActiveRecord::Schema.define(version: 2019_09_17_051251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,7 +49,10 @@ ActiveRecord::Schema.define(version: 2019_09_17_045824) do
     t.text "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "departments_id", null: false
+    t.index ["departments_id"], name: "index_students_on_departments_id"
   end
 
   add_foreign_key "books", "categories", column: "categories_id"
+  add_foreign_key "students", "departments", column: "departments_id"
 end
