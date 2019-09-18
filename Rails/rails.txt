@@ -244,6 +244,9 @@ Book Load (1.1ms)  SELECT DISTINCT "books"."author" FROM "books" LIMIT $1  [["LI
    (1.5ms)  SELECT COUNT("books"."author") AS count_author, "books"."author" AS books_author FROM "books" GROUP BY "books"."author"
  => {"Bryan"=>1, "Yashwant_Kanetkar"=>1, "Chetan_Bhagat"=>1, "Bert"=>1, "NP_Bali"=>2}
 
+2.6.1 :003 > b=Book.select("author").group("author").having('count(*)>1').count
+   (1.7ms)  SELECT COUNT("books"."author") AS count_author, "books"."author", "books"."author" AS books_author FROM "books" GROUP BY "books"."author" HAVING (count(*)>1)
+ => {"NP_Bali"=>2} 
 
 
 
