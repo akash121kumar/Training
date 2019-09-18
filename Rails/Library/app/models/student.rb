@@ -1,5 +1,6 @@
 class Student < ApplicationRecord
 	belongs_to :department
-	validates :name :address , presence :true
+	has_many :books,through: :book_issues
+	
 
 end
