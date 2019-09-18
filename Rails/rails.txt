@@ -89,3 +89,108 @@ Department Load (0.6ms)  SELECT "departments".* FROM "departments" LIMIT $1  [["
  BookIssue Load (1.4ms)  SELECT "book_issues".* FROM "book_issues" LIMIT $1  [["LIMIT", 11]]
  => #<ActiveRecord::Relation [#<BookIssue id: 1, issue_date: "2019-09-10", return_date: "2019-09-22", created_at: "2019-09-18 09:01:12", updated_at: "2019-09-18 09:01:12", students_id: 1, books_id: 3>, #<BookIssue id: 2, issue_date: "2019-11-12", return_date: "2019-11-25", created_at: "2019-09-18 09:03:09", updated_at: "2019-09-18 09:03:09", students_id: 4, books_id: 5>, #<BookIssue id: 3, issue_date: "2018-12-20", return_date: "2019-01-04", created_at: "2019-09-18 09:05:53", updated_at: "2019-09-18 09:05:53", students_id: 3, books_id: 2>, #<BookIssue id: 4, issue_date: "2019-10-02", return_date: "2019-10-25", created_at: "2019-09-18 09:07:14", updated_at: "2019-09-18 09:07:14", students_id: 5, books_id: 4>, #<BookIssue id: 5, issue_date: "2019-10-10", return_date: "2019-10-20", created_at: "2019-09-18 09:08:14", updated_at: "2019-09-18 09:08:14", students_id: 6, books_id: 1>, #<BookIssue id: 6, issue_date: "2019-10-15", return_date: "2019-11-05", created_at: "2019-09-18 09:09:45", updated_at: "2019-09-18 09:09:45", students_id: 7, books_id: 2>, #<BookIssue id: 7, issue_date: "2019-11-15", return_date: "2019-11-30", created_at: "2019-09-18 09:10:51", updated_at: "2019-09-18 09:10:51", students_id: 1, books_id: 4>, #<BookIssue id: 8, issue_date: "2019-12-01", return_date: "2019-12-15", created_at: "2019-09-18 09:12:42", updated_at: "2019-09-18 09:12:42", students_id: 4, books_id: 6>, #<BookIssue id: 9, issue_date: "2018-12-05", return_date: "2019-01-15", created_at: "2019-09-18 09:13:35", updated_at: "2019-09-18 09:13:35", students_id: 5, books_id: 2>]> 
 
+
+Queries:=>
+
+==> Retrieving Single Object ==>
+1.		Find
+ex- 2.6.1 :008 > s=Student.find(2)
+  Student Load (0.6ms)  SELECT "students".* FROM "students" WHERE "students"."id" = $1 LIMIT $2  [["id", 2], ["LIMIT", 1]]
+ => #<Student id: 2, name: "varun", address: "Faridabad", created_at: "2019-09-18 07:30:47", updated_at: "2019-09-18 07:30:47", department_id: 4> 
+
+2.6.1 :009 > b=BookIssue.find(4)
+  BookIssue Load (1.1ms)  SELECT "book_issues".* FROM "book_issues" WHERE "book_issues"."id" = $1 LIMIT $2  [["id", 4], ["LIMIT", 1]]
+ => #<BookIssue id: 4, issue_date: "2019-10-02", return_date: "2019-10-25", created_at: "2019-09-18 09:07:14", updated_at: "2019-09-18 09:07:14", students_id: 5, books_id: 4>
+
+2.6.1 :011 > s=Student.find(1,7)
+  Student Load (1.8ms)  SELECT "students".* FROM "students" WHERE "students"."id" IN ($1, $2)  [["id", 1], ["id", 7]]
+ => [#<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2>, #<Student id: 7, name: "Nikhil", address: "Jhajjar", created_at: "2019-09-18 07:40:57", updated_at: "2019-09-18 07:40:57", department_id: 1>] 
+
+
+2.		Take
+
+2.6.1 :013 > s=Student.take(3)
+  Student Load (1.1ms)  SELECT "students".* FROM "students" LIMIT $1  [["LIMIT", 3]]
+ => [#<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2>, #<Student id: 2, name: "varun", address: "Faridabad", created_at: "2019-09-18 07:30:47", updated_at: "2019-09-18 07:30:47", department_id: 4>, #<Student id: 3, name: "Mragank", address: "Delhi", created_at: "2019-09-18 07:37:13", updated_at: "2019-09-18 07:37:13", department_id: 1>] 
+
+3.		First
+
+2.6.1 :015 > s=Student.first
+  Student Load (1.0ms)  SELECT "students".* FROM "students" ORDER BY "students"."id" ASC LIMIT $1  [["LIMIT", 1]]
+ => #<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2> 
+
+2.6.1 :016 > b=Book.order(:name).first(2)
+  Book Load (1.0ms)  SELECT "books".* FROM "books" ORDER BY "books"."name" ASC LIMIT $1  [["LIMIT", 2]]
+ => [#<Book id: 5, name: "GameofThrones", author: "Bryan", price: 800, created_at: "2019-09-18 08:56:16", updated_at: "2019-09-18 08:56:16", category_id: 3>, #<Book id: 3, name: "HeadFirst_Java", author: "Bert", price: 600, created_at: "2019-09-18 08:48:54", updated_at: "2019-09-18 08:48:54", category_id: 1>] 
+
+4.		Last
+
+2.6.1 :018 > s=Student.last
+  Student Load (0.9ms)  SELECT "students".* FROM "students" ORDER BY "students"."id" DESC LIMIT $1  [["LIMIT", 1]]
+ => #<Student id: 7, name: "Nikhil", address: "Jhajjar", created_at: "2019-09-18 07:40:57", updated_at: "2019-09-18 07:40:57", department_id: 1> 
+
+5.		Find_by
+
+2.6.1 :019 > 
+2.6.1 :020 > s=Student.find_by name: 'Akash'
+  Student Load (0.9ms)  SELECT "students".* FROM "students" WHERE "students"."name" = $1 LIMIT $2  [["name", "Akash"], ["LIMIT", 1]]
+ => #<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2> 
+2.6.1 :021 > s=Student.find_by(name:'Akash')
+  Student Load (1.0ms)  SELECT "students".* FROM "students" WHERE "students"."name" = $1 LIMIT $2  [["name", "Akash"], ["LIMIT", 1]]
+ => #<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2>
+
+6.		Find_by!
+
+2.6.1 :022 > s=Student.find_by!(name:'Does')
+  Student Load (1.2ms)  SELECT "students".* FROM "students" WHERE "students"."name" = $1 LIMIT $2  [["name", "Does"], ["LIMIT", 1]]
+Traceback (most recent call last):
+        1: from (irb):22
+ActiveRecord::RecordNotFound (Couldn't find Student)
+
+==>retrieving multiple objects in Batches ==>
+
+1.			find_each
+
+2.6.1 :023 > s=Student.find_each
+  Student Load (1.1ms)  SELECT "students".* FROM "students" LIMIT $1  [["LIMIT", 11]]
+ => #<Enumerator: #<ActiveRecord::Relation [#<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2>, #<Student id: 2, name: "varun", address: "Faridabad", created_at: "2019-09-18 07:30:47", updated_at: "2019-09-18 07:30:47", department_id: 4>, #<Student id: 3, name: "Mragank", address: "Delhi", created_at: "2019-09-18 07:37:13", updated_at: "2019-09-18 07:37:13", department_id: 1>, #<Student id: 4, name: "Abhishek", address: "Ballabgarh", created_at: "2019-09-18 07:38:15", updated_at: "2019-09-18 07:38:15", department_id: 4>, #<Student id: 5, name: "Ankush", address: "Gurgaon", created_at: "2019-09-18 07:39:07", updated_at: "2019-09-18 07:39:07", department_id: 3>, #<Student id: 6, name: "Vivek", address: "Delhi", created_at: "2019-09-18 07:40:07", updated_at: "2019-09-18 07:40:07", department_id: 2>, #<Student id: 7, name: "Nikhil", address: "Jhajjar", created_at: "2019-09-18 07:40:57", updated_at: "2019-09-18 07:40:57", department_id: 1>]>:find_each(start: , finish: , batch_size: 1000, error_on_ignore: )> 
+2.6.1 :024 > 
+
+==> Conditions ==>
+1.	Where condition(Pure String condition)
+
+2.6.1 :034 > s=Student.where("name='Akash'")
+  Student Load (1.4ms)  SELECT "students".* FROM "students" WHERE (name='Akash') LIMIT $1  [["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2>]> 
+
+2.6.1 :035 > b=Book.where("author='NP_Bali'")
+  Book Load (1.7ms)  SELECT "books".* FROM "books" WHERE (author='NP_Bali') LIMIT $1  [["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Book id: 2, name: "Mathematics_1", author: "NP_Bali", price: 400, created_at: "2019-09-18 08:46:15", updated_at: "2019-09-18 08:51:50", category_id: 2>, #<Book id: 6, name: "Mathematics_2", author: "NP_Bali", price: 500, created_at: "2019-09-18 08:57:29", updated_at: "2019-09-18 08:57:29", category_id: 2>]> 
+
+2.	Array Conditions 
+
+2.6.1 :001 > b=Book.where("author='NP_Bali' AND name='Mathematics_2'")
+  Book Load (1.2ms)  SELECT "books".* FROM "books" WHERE (author='NP_Bali' AND name='Mathematics_2') LIMIT $1  [["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Book id: 6, name: "Mathematics_2", author: "NP_Bali", price: 500, created_at: "2019-09-18 08:57:29", updated_at: "2019-09-18 08:57:29", category_id: 2>]> 
+
+3.	Subset Conditions
+
+2.6.1 :006 > s=Book.where(id: [1,3,5])
+  Book Load (2.1ms)  SELECT "books".* FROM "books" WHERE "books"."id" IN ($1, $2, $3) LIMIT $4  [["id", 1], ["id", 3], ["id", 5], ["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Book id: 1, name: "Let us C", author: "Yashwant_Kanetkar", price: 300, created_at: "2019-09-18 08:44:46", updated_at: "2019-09-18 08:49:57", category_id: 1>, #<Book id: 3, name: "HeadFirst_Java", author: "Bert", price: 600, created_at: "2019-09-18 08:48:54", updated_at: "2019-09-18 08:48:54", category_id: 1>, #<Book id: 5, name: "GameofThrones", author: "Bryan", price: 800, created_at: "2019-09-18 08:56:16", updated_at: "2019-09-18 08:56:16", category_id: 3>]> 
+
+4.	NOT Conditions
+
+2.6.1 :007 > s=Book.where.not(id:2)
+Book Load (1.0ms)  SELECT "books".* FROM "books" WHERE "books"."id" != $1 LIMIT $2  [["id", 2], ["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Book id: 3, name: "HeadFirst_Java", author: "Bert", price: 600, created_at: "2019-09-18 08:48:54", updated_at: "2019-09-18 08:48:54", category_id: 1>, #<Book id: 1, name: "Let us C", author: "Yashwant_Kanetkar", price: 300, created_at: "2019-09-18 08:44:46", updated_at: "2019-09-18 08:49:57", category_id: 1>, #<Book id: 4, name: "Two_States", author: "Chetan_Bhagat", price: 250, created_at: "2019-09-18 08:53:24", updated_at: "2019-09-18 08:53:24", category_id: 3>, #<Book id: 5, name: "GameofThrones", author: "Bryan", price: 800, created_at: "2019-09-18 08:56:16", updated_at: "2019-09-18 08:56:16", category_id: 3>, #<Book id: 6, name: "Mathematics_2", author: "NP_Bali", price: 500, created_at: "2019-09-18 08:57:29", updated_at: "2019-09-18 08:57:29", category_id: 2>]> 
+
+
+
+
+
+
+
+
+
+
