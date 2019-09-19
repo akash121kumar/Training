@@ -248,6 +248,23 @@ Book Load (1.1ms)  SELECT DISTINCT "books"."author" FROM "books" LIMIT $1  [["LI
    (1.7ms)  SELECT COUNT("books"."author") AS count_author, "books"."author", "books"."author" AS books_author FROM "books" GROUP BY "books"."author" HAVING (count(*)>1)
  => {"NP_Bali"=>2} 
 
+==> Joins  ==>
+
+2.6.1 :072 > Student.second.books
+  Student Load (0.8ms)  SELECT "students".* FROM "students" ORDER BY "students"."id" ASC LIMIT $1 OFFSET $2  [["LIMIT", 1], ["OFFSET", 1]]
+  Book Load (1.3ms)  SELECT "books".* FROM "books" INNER JOIN "book_issues" ON "books"."id" = "book_issues"."book_id" WHERE "book_issues"."student_id" = $1 LIMIT $2  [["student_id", 2], ["LIMIT", 11]]
+ => #<ActiveRecord::Associations::CollectionProxy [#<Book id: 5, name: "GameofThrones", author: "Bryan", price: 800, created_at: "2019-09-18 08:56:16", updated_at: "2019-09-18 08:56:16", category_id: 3>]>
+
+2.6.1 :073 > Student.second.books.pluck(:name)
+  Student Load (1.3ms)  SELECT "students".* FROM "students" ORDER BY "students"."id" ASC LIMIT $1 OFFSET $2  [["LIMIT", 1], ["OFFSET", 1]]
+   (0.8ms)  SELECT "books"."name" FROM "books" INNER JOIN "book_issues" ON "books"."id" = "book_issues"."book_id" WHERE "book_issues"."student_id" = $1  [["student_id", 2]]
+ => ["GameofThrones"] 
+
+2.6.1 :075 > Student.second.books.pluck(:name,:author)
+  Student Load (1.2ms)  SELECT "students".* FROM "students" ORDER BY "students"."id" ASC LIMIT $1 OFFSET $2  [["LIMIT", 1], ["OFFSET", 1]]
+   (1.4ms)  SELECT "books"."name", "books"."author" FROM "books" INNER JOIN "book_issues" ON "books"."id" = "book_issues"."book_id" WHERE "book_issues"."student_id" = $1  [["student_id", 2]]
+ => [["GameofThrones", "Bryan"]] 
+
 
 
 

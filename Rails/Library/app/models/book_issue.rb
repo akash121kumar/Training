@@ -1,4 +1,5 @@
 class BookIssue < ApplicationRecord
-	has_many :books 
-	has_many :students
+	belongs_to :student
+	belongs_to :book
+
 end
