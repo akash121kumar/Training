@@ -265,6 +265,40 @@ Book Load (1.1ms)  SELECT DISTINCT "books"."author" FROM "books" LIMIT $1  [["LI
    (1.4ms)  SELECT "books"."name", "books"."author" FROM "books" INNER JOIN "book_issues" ON "books"."id" = "book_issues"."book_id" WHERE "book_issues"."student_id" = $1  [["student_id", 2]]
  => [["GameofThrones", "Bryan"]] 
 
+2.6.1 :026 > Book.joins(:students).select(:name).group(:name).count
+   (2.1ms)  SELECT COUNT("books"."name") AS count_name, "books"."name" AS books_name FROM "books" INNER JOIN "book_issues" ON "book_issues"."book_id" = "books"."id" INNER JOIN "students" ON "students"."id" = "book_issues"."student_id" GROUP BY "books"."name"
+ => {"HeadFirst_Java"=>3, "Let us C"=>1, "Mathematics_1"=>1, "GameofThrones"=>1} 
+
+2.6.1 :034 > Book.select(:category_id).group(:category_id).count
+   (1.5ms)  SELECT COUNT("books"."category_id") AS count_category_id, "books"."category_id" AS books_category_id FROM "books" GROUP BY "books"."category_id"
+ => {3=>2, 2=>2, 1=>2} 
+
+2.6.1 :025 > Student.joins(:books).select(:name).group(:name).count
+   (55.9ms)  SELECT COUNT("students"."name") AS count_name, "students"."name" AS students_name FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" GROUP BY "students"."name"
+ => {"Mragank"=>1, "varun"=>2, "Akash"=>3} 
+
+ (1.5ms)  SELECT COUNT("book_issues"."issued_date") AS count_issued_date, "book_issues"."issued_date", "book_issues"."issued_date" AS book_issues_issued_date FROM "book_issues" GROUP BY "book_issues"."issued_date" HAVING (count(*)>1)
+ => {Thu, 19 Sep 2019=>5} 
+
+ (1.7ms)  SELECT "issued_date", "students"."name", "book_id" FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id"
+ => [[Fri, 12 Apr 2019, "varun", 5], [Thu, 19 Sep 2019, "Akash", 1], [Thu, 19 Sep 2019, "Akash", 2], [Thu, 19 Sep 2019, "Akash", 3], [Thu, 19 Sep 2019, "varun", 3], [Thu, 19 Sep 2019, "Mragank", 3]] 
+
+2.6.1 :080 > Student.joins(:books).where(name:'Akash').pluck(:name,:book_id)
+   (2.2ms)  SELECT "students"."name", "book_id" FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" WHERE "students"."name" = $1  [["name", "Akash"]]
+ => [["Akash", 1], ["Akash", 2], ["Akash", 3]] 
+
+2.6.1 :087 > Book.select(:category_id).distinct.count
+   (1.2ms)  SELECT COUNT(DISTINCT "books"."category_id") FROM "books"
+ => 3 
+
+2.6.1 :086 > Book.select(:name).count
+   (1.3ms)  SELECT COUNT("books"."name") FROM "books"
+ => 6 
+
+
+
+
+
 
 
 
