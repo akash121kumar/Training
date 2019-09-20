@@ -298,6 +298,31 @@ Book Load (1.1ms)  SELECT DISTINCT "books"."author" FROM "books" LIMIT $1  [["LI
    (2.3ms)  SELECT COUNT("books"."name") AS count_name, "books"."name", "books"."name" AS books_name FROM "books" INNER JOIN "book_issues" ON "book_issues"."book_id" = "books"."id" INNER JOIN "students" ON "students"."id" = "book_issues"."student_id" GROUP BY "books"."name" HAVING (count(*)<2)
  => {"Let us C"=>1, "Mathematics_1"=>1, "GameofThrones"=>1} 
 
+2.6.1 :126 > Student.where("name like 'A%'")
+  Student Load (48.9ms)  SELECT "students".* FROM "students" WHERE (name like 'A%') LIMIT $1  [["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2>, #<Student id: 4, name: "Abhishek", address: "Ballabgarh", created_at: "2019-09-18 07:38:15", updated_at: "2019-09-18 07:38:15", department_id: 4>, #<Student id: 5, name: "Ankush", address: "Gurgaon", created_at: "2019-09-18 07:39:07", updated_at: "2019-09-18 07:39:07", department_id: 3>]> 
+
+  (5.0ms)  SELECT "students"."name" FROM "students" INNER JOIN "departments" ON "departments"."id" = "students"."department_id" WHERE (department_id=1)
+ => ["Mragank", "Nikhil"] 
+
+2.6.1 :146 > Student.joins(:books).pluck(:name,:book_id)
+   (2.0ms)  SELECT "students"."name", "book_id" FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id"
+ => [["varun", 5], ["Akash", 1], ["Akash", 2], ["Akash", 3], ["varun", 3], ["Mragank", 3]] 
+
+2.6.1 :173 > Department.joins(:students).select(:name).group(:name).count
+   (2.1ms)  SELECT COUNT("departments"."name") AS count_name, "departments"."name" AS departments_name FROM "departments" INNER JOIN "students" ON "students"."department_id" = "departments"."id" GROUP BY "departments"."name"
+ => {"CSE"=>2, "CE"=>1, "ECE"=>2, "ME"=>2} 
+
+2.6.1 :176 > Student.where("name like '%h'").pluck(:id,:name)
+   (1.4ms)  SELECT "students"."id", "students"."name" FROM "students" WHERE (name like '%h')
+ => [[1, "Akash"], [5, "Ankush"]] 
+
+2.6.1 :184 > Category.joins(:books).select(:name).group(:name).count
+   (31.0ms)  SELECT COUNT("categories"."name") AS count_name, "categories"."name" AS categories_name FROM "categories" INNER JOIN "books" ON "books"."category_id" = "categories"."id" GROUP BY "categories"."name"
+ => {"Novel"=>2, "Mathematics"=>2, "Programming"=>2} 
+
+
+
 
 
 
