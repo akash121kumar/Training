@@ -295,6 +295,9 @@ Book Load (1.1ms)  SELECT DISTINCT "books"."author" FROM "books" LIMIT $1  [["LI
    (1.3ms)  SELECT COUNT("books"."name") FROM "books"
  => 6 
 
+   (2.3ms)  SELECT COUNT("books"."name") AS count_name, "books"."name", "books"."name" AS books_name FROM "books" INNER JOIN "book_issues" ON "book_issues"."book_id" = "books"."id" INNER JOIN "students" ON "students"."id" = "book_issues"."student_id" GROUP BY "books"."name" HAVING (count(*)<2)
+ => {"Let us C"=>1, "Mathematics_1"=>1, "GameofThrones"=>1} 
+
 
 
 
