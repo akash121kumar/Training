@@ -445,6 +445,30 @@ Book Load (1.1ms)  SELECT DISTINCT "books"."author" FROM "books" LIMIT $1  [["LI
  => {"Mragank"=>600, "varun"=>1400, "Akash"=>1300} 
 
 
+2.6.1 :020 > Employee.joins(:notes).where(id:1).pluck(:content)
+   (1.6ms)  SELECT "content" FROM "employees" INNER JOIN "notes" ON "notes"."notable_id" = "employees"."id" AND "notes"."notable_type" = $1 WHERE "employees"."id" = $2  [["notable_type", "Employee"], ["id", 1]]
+ => ["Hello this is note"] 
+
+2.6.1 :027 > Assembly.joins(:parts).pluck(:name,'parts.part_number')
+   (2.5ms)  SELECT "assemblies"."name", parts.part_number FROM "assemblies" INNER JOIN "assemblies_parts" ON "assemblies_parts"."assembly_id" = "assemblies"."id" INNER JOIN "parts" ON "parts"."id" = "assemblies_parts"."part_id"
+ => [["santro", "Light432"], ["santro", "clutch432"], ["santro", "brake_liquid121"], ["celerio", "Light432"], ["celerio", "clutch432"], ["celerio", "clutch_wire100"], ["wagon_r", "brake_handle413"]] 
+
+2.6.1 :028 > Assembly.joins(:parts).select(:name).group(:name).count
+   (3.2ms)  SELECT COUNT("assemblies"."name") AS count_name, "assemblies"."name" AS assemblies_name FROM "assemblies" INNER JOIN "assemblies_parts" ON "assemblies_parts"."assembly_id" = "assemblies"."id" INNER JOIN "parts" ON "parts"."id" = "assemblies_parts"."part_id" GROUP BY "assemblies"."name"
+ => {"celerio"=>3, "wagon_r"=>1, "santro"=>3} 
+
+2.6.1 :030 > Part.joins(:assemblies).select(:part_number).group(:part_number).count
+   (2.2ms)  SELECT COUNT("parts"."part_number") AS count_part_number, "parts"."part_number" AS parts_part_number FROM "parts" INNER JOIN "assemblies_parts" ON "assemblies_parts"."part_id" = "parts"."id" INNER JOIN "assemblies" ON "assemblies"."id" = "assemblies_parts"."assembly_id" GROUP BY "parts"."part_number"
+ => {"Light432"=>2, "brake_liquid121"=>1, "clutch_wire100"=>1, "clutch432"=>2, "brake_handle413"=>1} 
+
+2.6.1 :028 > Company.joins(:notes).pluck(:content)
+   (1.7ms)  SELECT "content" FROM "companies" INNER JOIN "notes" ON "notes"."notable_id" = "companies"."id" AND "notes"."notable_type" = $1  [["notable_type", "Company"]]
+ => ["Hi this is note for company"] 
+
+2.6.1 :031 > Employee.left_outer_joins(:notes)
+  Employee Load (1.5ms)  SELECT "employees".* FROM "employees" LEFT OUTER JOIN "notes" ON "notes"."notable_id" = "employees"."id" AND "notes"."notable_type" = $1 LIMIT $2  [["notable_type", "Employee"], ["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Employee id: 1, name: "Akash", created_at: "2019-09-23 10:50:41", updated_at: "2019-09-23 10:50:41">, #<Employee id: 2, name: "Vijay", created_at: "2019-09-23 10:50:47", updated_at: "2019-09-23 10:50:47">, #<Employee id: 3, name: "Jai", created_at: "2019-09-23 10:50:52", updated_at: "2019-09-23 10:50:52">, #<Employee id: 4, name: "Sunny", created_at: "2019-09-23 10:50:56", updated_at: "2019-09-23 10:50:56">, #<Employee id: 5, name: "Abhishek", created_at: "2019-09-23 10:51:05", updated_at: "2019-09-23 10:51:05">, #<Employee id: 6, name: "Vikas", created_at: "2019-09-23 10:51:12", updated_at: "2019-09-23 10:51:12">]> 
+
 
 
 
