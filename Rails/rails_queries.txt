@@ -321,9 +321,106 @@ Book Load (1.1ms)  SELECT DISTINCT "books"."author" FROM "books" LIMIT $1  [["LI
    (31.0ms)  SELECT COUNT("categories"."name") AS count_name, "categories"."name" AS categories_name FROM "categories" INNER JOIN "books" ON "books"."category_id" = "categories"."id" GROUP BY "categories"."name"
  => {"Novel"=>2, "Mathematics"=>2, "Programming"=>2} 
 
+2.6.1 :018 > Student.all.pluck(:name)
+   (1.2ms)  SELECT "students"."name" FROM "students"
+ => ["Akash", "varun", "Mragank", "Abhishek", "Ankush", "Vivek", "Nikhil"] 
+
+2.6.1 :019 > Student.all.pluck(:address)
+   (1.2ms)  SELECT "students"."address" FROM "students"
+ => ["Faridabad", "Faridabad", "Delhi", "Ballabgarh", "Gurgaon", "Delhi", "Jhajjar"] 
+
+2.6.1 :020 > Student.select(:address).group(:address).count
+   (1.8ms)  SELECT COUNT("students"."address") AS count_address, "students"."address" AS students_address FROM "students" GROUP BY "students"."address"
+ => {"Gurgaon"=>1, "Faridabad"=>2, "Jhajjar"=>1, "Delhi"=>2, "Ballabgarh"=>1} 
+
+2.6.1 :044 > Student.where("name like 'A%'")
+  Student Load (1.7ms)  SELECT "students".* FROM "students" WHERE (name like 'A%') LIMIT $1  [["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2>, #<Student id: 4, name: "Abhishek", address: "Ballabgarh", created_at: "2019-09-18 07:38:15", updated_at: "2019-09-18 07:38:15", department_id: 4>, #<Student id: 5, name: "Ankush", address: "Gurgaon", created_at: "2019-09-18 07:39:07", updated_at: "2019-09-18 07:39:07", department_id: 3>]> 
+
+2.6.1 :045 > Student.select(:address).distinct
+  Student Load (1.0ms)  SELECT DISTINCT "students"."address" FROM "students" LIMIT $1  [["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<Student id: nil, address: "Gurgaon">, #<Student id: nil, address: "Faridabad">, #<Student id: nil, address: "Jhajjar">, #<Student id: nil, address: "Delhi">, #<Student id: nil, address: "Ballabgarh">]> 
+
+2.6.1 :046 > Student.limit(2)
+  Student Load (1.1ms)  SELECT "students".* FROM "students" LIMIT $1  [["LIMIT", 2]]
+ => #<ActiveRecord::Relation [#<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2>, #<Student id: 2, name: "varun", address: "Faridabad", created_at: "2019-09-18 07:30:47", updated_at: "2019-09-18 07:30:47", department_id: 4>]> 
+
+2.6.1 :053 > Student.left_outer_joins(:books).pluck(:name,:book_id)
+   (1.7ms)  SELECT "students"."name", "book_id" FROM "students" LEFT OUTER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" LEFT OUTER JOIN "books" ON "books"."id" = "book_issues"."book_id"
+ => [["varun", 5], ["Akash", 1], ["Akash", 2], ["Akash", 3], ["varun", 3], ["Mragank", 3], ["Ankush", nil], ["Vivek", nil], ["Abhishek", nil], ["Nikhil", nil]] 
 
 
+2.6.1 :054 > Student.left_outer_joins(:books).select(:name).group(:name).count
+   (1.9ms)  SELECT COUNT("students"."name") AS count_name, "students"."name" AS students_name FROM "students" LEFT OUTER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" LEFT OUTER JOIN "books" ON "books"."id" = "book_issues"."book_id" GROUP BY "students"."name"
+ => {"Mragank"=>1, "Nikhil"=>1, "varun"=>2, "Akash"=>3, "Ankush"=>1, "Abhishek"=>1, "Vivek"=>1} 
 
+2.6.1 :060 > BookIssue.joins(:book,:student).select(:student_id,:book_id,:issued_date)
+  BookIssue Load (1.9ms)  SELECT "book_issues"."student_id", "book_issues"."book_id", "book_issues"."issued_date" FROM "book_issues" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" INNER JOIN "students" ON "students"."id" = "book_issues"."student_id" LIMIT $1  [["LIMIT", 11]]
+ => #<ActiveRecord::Relation [#<BookIssue id: nil, student_id: 1, book_id: 1, issued_date: "2019-09-19">, #<BookIssue id: nil, student_id: 1, book_id: 2, issued_date: "2019-09-19">, #<BookIssue id: nil, student_id: 3, book_id: 3, issued_date: "2019-09-19">, #<BookIssue id: nil, student_id: 2, book_id: 3, issued_date: "2019-09-19">, #<BookIssue id: nil, student_id: 1, book_id: 3, issued_date: "2019-09-19">, #<BookIssue id: nil, student_id: 2, book_id: 5, issued_date: "2019-04-12">]> 
+
+ (1.0ms)  SELECT "students"."name", books.name FROM "students" LEFT OUTER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" LEFT OUTER JOIN "books" ON "books"."id" = "book_issues"."book_id"
+ => [["varun", "GameofThrones"], ["Akash", "Let us C"], ["Akash", "Mathematics_1"], ["Akash", "HeadFirst_Java"], ["varun", "HeadFirst_Java"], ["Mragank", "HeadFirst_Java"], ["Ankush", nil], ["Vivek", nil], ["Abhishek", nil], ["Nikhil", nil]]
+
+2.6.1 :076 > BookIssue.joins(:book,:student).pluck(:id,:issued_date,'books.name','students.name')
+   (2.2ms)  SELECT "book_issues"."id", "book_issues"."issued_date", books.name, students.name FROM "book_issues" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" INNER JOIN "students" ON "students"."id" = "book_issues"."student_id"
+ => [[1, Fri, 12 Apr 2019, "GameofThrones", "varun"], [2, Thu, 19 Sep 2019, "Let us C", "Akash"], [3, Thu, 19 Sep 2019, "Mathematics_1", "Akash"], [4, Thu, 19 Sep 2019, "HeadFirst_Java", "Akash"], [5, Thu, 19 Sep 2019, "HeadFirst_Java", "varun"], [6, Thu, 19 Sep 2019, "HeadFirst_Java", "Mragank"]] 
+
+2.6.1 :078 > Student.joins(:department).pluck(:id,:name,'departments.name')
+   (1.5ms)  SELECT "students"."id", "students"."name", departments.name FROM "students" INNER JOIN "departments" ON "departments"."id" = "students"."department_id"
+ => [[1, "Akash", "CSE"], [2, "varun", "ECE"], [3, "Mragank", "ME"], [4, "Abhishek", "ECE"], [5, "Ankush", "CE"], [6, "Vivek", "CSE"], [7, "Nikhil", "ME"]] 
+
+2.6.1 :079 > Student.find_by_address('Faridabad')
+  Student Load (0.7ms)  SELECT "students".* FROM "students" WHERE "students"."address" = $1 LIMIT $2  [["address", "Faridabad"], ["LIMIT", 1]]
+ => #<Student id: 1, name: "Akash", address: "Faridabad", created_at: "2019-09-18 07:27:35", updated_at: "2019-09-18 07:27:35", department_id: 2> 
+
+2.6.1 :083 > Student.ids
+   (1.4ms)  SELECT "students"."id" FROM "students"
+ => [1, 2, 3, 4, 5, 6, 7] 
+
+2.6.1 :084 > Student.exists?(name:'Akash')
+  Student Exists? (1.3ms)  SELECT 1 AS one FROM "students" WHERE "students"."name" = $1 LIMIT $2  [["name", "Akash"], ["LIMIT", 1]]
+ => true 
+
+2.6.1 :088 > Student.joins(:books).where('books.id':3).count
+   (2.1ms)  SELECT COUNT(*) FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" WHERE "books"."id" = $1  [["id", 3]]
+ => 3 
+
+2.6.1 :093 > Book.minimum("price")
+   (1.8ms)  SELECT MIN("books"."price") FROM "books"
+ => 250 
+
+2.6.1 :094 > Book.maximum("price")
+   (1.5ms)  SELECT MAX("books"."price") FROM "books"
+ => 800 
+
+2.6.1 :097 > Student.where(id:1).joins(:books).pluck(:name,:book_id,'books.name')
+   (2.0ms)  SELECT "students"."name", "book_id", books.name FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" WHERE "students"."id" = $1  [["id", 1]]
+ => [["Akash", 3, "HeadFirst_Java"], ["Akash", 1, "Let us C"], ["Akash", 2, "Mathematics_1"]] 
+
+2.6.1 :098 > Student.where(name:'varun').joins(:books).pluck(:name,:book_id,'books.name')
+   (1.8ms)  SELECT "students"."name", "book_id", books.name FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" WHERE "students"."name" = $1  [["name", "varun"]]
+ => [["varun", 5, "GameofThrones"], ["varun", 3, "HeadFirst_Java"]] 
+
+2.6.1 :102 > Student.where(name:'varun').joins(:books).explain
+  Student Load (1.9ms)  SELECT "students".* FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" WHERE "students"."name" = $1  [["name", "varun"]]
+ => EXPLAIN for: SELECT "students".* FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" WHERE "students"."name" = $1 [["name", "varun"]]
+                                    QUERY PLAN
+-----------------------------------------------------------------------------------
+ Nested Loop  (cost=18.31..42.76 rows=5 width=96)
+   ->  Hash Join  (cost=18.16..41.69 rows=5 width=104)
+         Hash Cond: (book_issues.student_id = students.id)
+         ->  Seq Scan on book_issues  (cost=0.00..20.70 rows=1070 width=16)
+         ->  Hash  (cost=18.12..18.12 rows=3 width=96)
+               ->  Seq Scan on students  (cost=0.00..18.12 rows=3 width=96)
+                     Filter: ((name)::text = 'varun'::text)
+   ->  Index Only Scan using books_pkey on books  (cost=0.15..0.21 rows=1 width=8)
+         Index Cond: (id = book_issues.book_id)
+(9 rows)
+
+
+2.6.1 :110 > BookIssue.joins(:student,:book).pluck(:id,:issued_date,'students.name','books.name')
+   (2.1ms)  SELECT "book_issues"."id", "book_issues"."issued_date", students.name, books.name FROM "book_issues" INNER JOIN "students" ON "students"."id" = "book_issues"."student_id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id"
+ => [[1, Fri, 12 Apr 2019, "varun", "GameofThrones"], [2, Thu, 19 Sep 2019, "Akash", "Let us C"], [3, Thu, 19 Sep 2019, "Akash", "Mathematics_1"], [4, Thu, 19 Sep 2019, "Akash", "HeadFirst_Java"], [5, Thu, 19 Sep 2019, "varun", "HeadFirst_Java"], [6, Thu, 19 Sep 2019, "Mragank", "HeadFirst_Java"]] 
 
 
 
