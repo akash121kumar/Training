@@ -422,8 +422,27 @@ Book Load (1.1ms)  SELECT DISTINCT "books"."author" FROM "books" LIMIT $1  [["LI
    (2.1ms)  SELECT "book_issues"."id", "book_issues"."issued_date", students.name, books.name FROM "book_issues" INNER JOIN "students" ON "students"."id" = "book_issues"."student_id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id"
  => [[1, Fri, 12 Apr 2019, "varun", "GameofThrones"], [2, Thu, 19 Sep 2019, "Akash", "Let us C"], [3, Thu, 19 Sep 2019, "Akash", "Mathematics_1"], [4, Thu, 19 Sep 2019, "Akash", "HeadFirst_Java"], [5, Thu, 19 Sep 2019, "varun", "HeadFirst_Java"], [6, Thu, 19 Sep 2019, "Mragank", "HeadFirst_Java"]] 
 
+2.6.1 :114 > Student.where(id:3).includes(:books).pluck(:name,'books.name')
+   (1.6ms)  SELECT "students"."name", books.name FROM "students" LEFT OUTER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" LEFT OUTER JOIN "books" ON "books"."id" = "book_issues"."book_id" WHERE "students"."id" = $1  [["id", 3]]
+ => [["Mragank", "HeadFirst_Java"]] 
+
+2.6.1 :117 > Book.average('price')
+   (1.4ms)  SELECT AVG("books"."price") FROM "books"
+ => 0.475e3 
+
+2.6.1 :118 > Book.sum('price')
+   (1.8ms)  SELECT SUM("books"."price") FROM "books"
+ => 2850 
 
 
+
+2.6.1 :129 > Category.joins(:books).select(:name).group(:name).sum('books.price')
+   (1.7ms)  SELECT SUM(books.price) AS sum_books_price, "categories"."name" AS categories_name FROM "categories" INNER JOIN "books" ON "books"."category_id" = "categories"."id" GROUP BY "categories"."name"
+ => {"Novel"=>1050, "Mathematics"=>900, "Programming"=>900} 
+
+2.6.1 :130 > Student.joins(:books).select(:name).group(:name).sum('books.price')
+   (2.2ms)  SELECT SUM(books.price) AS sum_books_price, "students"."name" AS students_name FROM "students" INNER JOIN "book_issues" ON "book_issues"."student_id" = "students"."id" INNER JOIN "books" ON "books"."id" = "book_issues"."book_id" GROUP BY "students"."name"
+ => {"Mragank"=>600, "varun"=>1400, "Akash"=>1300} 
 
 
 
